@@ -17,13 +17,13 @@ jobs:
           dotnet-version: '8.0.x'
           
       - name: Restore dependencies
-        run: dotnet restore src/Aloe.Utils.Wafu.JisCompat/Aloe.Utils.Wafu.JisCompat.csproj
+        run: dotnet restore src/Aloe.Utils.Wafu.Romaji.sln
         
       - name: Build
-        run: dotnet build src/Aloe.Utils.Wafu.JisCompat/Aloe.Utils.Wafu.JisCompat.csproj --configuration Release
+        run: dotnet build src/Aloe.Utils.Wafu.Romaji/Aloe.Utils.Wafu.Romaji.csproj --configuration Release
       
       - name: Pack (symbols+source)
-        run: dotnet pack src/Aloe.Utils.Wafu.JisCompat/Aloe.Utils.Wafu.JisCompat.csproj --configuration Release --no-build --include-symbols --include-source --output ./nupkgs
+        run: dotnet pack src/Aloe.Utils.Wafu.Romaji/Aloe.Utils.Wafu.Romaji.csproj --configuration Release --no-build --include-symbols --include-source --output ./nupkgs
       
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg ./nupkgs/*.snupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
