@@ -1,6 +1,8 @@
-﻿using System;
-using System.Buffers;
-using System.Runtime.CompilerServices;
+﻿// <copyright file="Romanizer.cs" company="ted-sharp">
+// Copyright (c) ted-sharp. All rights reserved.
+// </copyright>
+
+using static Aloe.Utils.Wafu.Romaji.KanaMap;
 
 namespace Aloe.Utils.Wafu.Romaji;
 
@@ -9,74 +11,6 @@ namespace Aloe.Utils.Wafu.Romaji;
 /// </summary>
 public static class Romanizer
 {
-    // ── 拗音パターンを定義 ──
-    /// <summary>きゃ</summary>
-    private const string KYA = "きゃ";
-    /// <summary>きゅ</summary>
-    private const string KYU = "きゅ";
-    /// <summary>きょ</summary>
-    private const string KYO = "きょ";
-    /// <summary>しゃ</summary>
-    private const string SHA = "しゃ";
-    /// <summary>しゅ</summary>
-    private const string SHU = "しゅ";
-    /// <summary>しょ</summary>
-    private const string SHO = "しょ";
-    /// <summary>ちゃ</summary>
-    private const string CHA = "ちゃ";
-    /// <summary>ちゅ</summary>
-    private const string CHU = "ちゅ";
-    /// <summary>ちょ</summary>
-    private const string CHO = "ちょ";
-    /// <summary>にゃ</summary>
-    private const string NYA = "にゃ";
-    /// <summary>にゅ</summary>
-    private const string NYU = "にゅ";
-    /// <summary>にょ</summary>
-    private const string NYO = "にょ";
-    /// <summary>ひゃ</summary>
-    private const string HYA = "ひゃ";
-    /// <summary>ひゅ</summary>
-    private const string HYU = "ひゅ";
-    /// <summary>ひょ</summary>
-    private const string HYO = "ひょ";
-    /// <summary>みゃ</summary>
-    private const string MYA = "みゃ";
-    /// <summary>みゅ</summary>
-    private const string MYU = "みゅ";
-    /// <summary>みょ</summary>
-    private const string MYO = "みょ";
-    /// <summary>りゃ</summary>
-    private const string RYA = "りゃ";
-    /// <summary>りゅ</summary>
-    private const string RYU = "りゅ";
-    /// <summary>りょ</summary>
-    private const string RYO = "りょ";
-    /// <summary>ぎゃ</summary>
-    private const string GYA = "ぎゃ";
-    /// <summary>ぎゅ</summary>
-    private const string GYU = "ぎゅ";
-    /// <summary>ぎょ</summary>
-    private const string GYO = "ぎょ";
-    /// <summary>じゃ</summary>
-    private const string JA = "じゃ";
-    /// <summary>じゅ</summary>
-    private const string JU = "じゅ";
-    /// <summary>じょ</summary>
-    private const string JO = "じょ";
-    /// <summary>びゃ</summary>
-    private const string BYA = "びゃ";
-    /// <summary>びゅ</summary>
-    private const string BYU = "びゅ";
-    /// <summary>びょ</summary>
-    private const string BYO = "びょ";
-    /// <summary>ぴゃ</summary>
-    private const string PYA = "ぴゃ";
-    /// <summary>ぴゅ</summary>
-    private const string PYU = "ぴゅ";
-    /// <summary>ぴょ</summary>
-    private const string PYO = "ぴょ";
-
     /// <summary>
     /// ひらがな・カタカナ混在文字列をヘボン式ローマ字に変換して返します。
     /// </summary>
@@ -89,17 +23,19 @@ public static class Romanizer
             return String.Empty;
         }
 
-        ValueStringBuilder vsb = new ValueStringBuilder(stackalloc char[256]);
+        var vsb = new ValueStringBuilder(stackalloc char[256]);
 
-        for (int i = 0; i < input.Length; i++)
+        for (var i = 0; i < input.Length; i++)
         {
             // ■ カタカナ→ひらがな正規化
-            char c0 = (input[i] >= 'ァ' && input[i] <= 'ヺ') ? (char)(input[i] - 0x60) : input[i];
+            var c0 = (input[i] >= 'ァ' && input[i] <= 'ヺ') ? (char)(input[i] - 0x60) : input[i];
 
             // ■ 拗音（二文字）チェック
             if (i + 1 < input.Length)
             {
-                ReadOnlySpan<char> two = input.Slice(i, 2);
+                var two = input.Slice(i, 2);
+#pragma warning disable SA1107 // Code should not contain multiple statements on one line
+#pragma warning disable SA1501 // Statement should not be on a single line
                 if (two.SequenceEqual(KYA)) { vsb.Append("kya"); i++; continue; }
                 if (two.SequenceEqual(KYU)) { vsb.Append("kyu"); i++; continue; }
                 if (two.SequenceEqual(KYO)) { vsb.Append("kyo"); i++; continue; }
@@ -133,13 +69,15 @@ public static class Romanizer
                 if (two.SequenceEqual(PYA)) { vsb.Append("pya"); i++; continue; }
                 if (two.SequenceEqual(PYU)) { vsb.Append("pyu"); i++; continue; }
                 if (two.SequenceEqual(PYO)) { vsb.Append("pyo"); i++; continue; }
+#pragma warning restore SA1501 // Statement should not be on a single line
+#pragma warning restore SA1107 // Code should not contain multiple statements on one line
             }
 
             // ■ 促音「っ」
             if (c0 == 'っ' && i + 1 < input.Length)
             {
-                char next = (input[i + 1] >= 'ァ' && input[i + 1] <= 'ヺ') ? (char)(input[i + 1] - 0x60) : input[i + 1];
-                string m = MapSingle(next);
+                var next = (input[i + 1] >= 'ァ' && input[i + 1] <= 'ヺ') ? (char)(input[i + 1] - 0x60) : input[i + 1];
+                var m = MapSingle(next);
                 if (!String.IsNullOrEmpty(m))
                 {
                     vsb.Append(m[0]);
@@ -165,95 +103,4 @@ public static class Romanizer
 
         return vsb.ToString();
     }
-
-    /// <summary>
-    /// ひらがな1文字をローマ字に変換します。
-    /// </summary>
-    /// <param name="hira">変換対象のひらがな1文字</param>
-    /// <returns>ローマ字文字列</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static string MapSingle(char hira) => hira switch
-    {
-        'あ' => "a",
-        'い' => "i",
-        'う' => "u",
-        'え' => "e",
-        'お' => "o",
-        'か' => "ka",
-        'き' => "ki",
-        'く' => "ku",
-        'け' => "ke",
-        'こ' => "ko",
-        'さ' => "sa",
-        'し' => "shi",
-        'す' => "su",
-        'せ' => "se",
-        'そ' => "so",
-        'た' => "ta",
-        'ち' => "chi",
-        'つ' => "tsu",
-        'て' => "te",
-        'と' => "to",
-        'な' => "na",
-        'に' => "ni",
-        'ぬ' => "nu",
-        'ね' => "ne",
-        'の' => "no",
-        'は' => "ha",
-        'ひ' => "hi",
-        'ふ' => "fu",
-        'へ' => "he",
-        'ほ' => "ho",
-        'ま' => "ma",
-        'み' => "mi",
-        'む' => "mu",
-        'め' => "me",
-        'も' => "mo",
-        'や' => "ya",
-        'ゆ' => "yu",
-        'よ' => "yo",
-        'ら' => "ra",
-        'り' => "ri",
-        'る' => "ru",
-        'れ' => "re",
-        'ろ' => "ro",
-        'わ' => "wa",
-        'を' => "wo",
-        'ん' => "n",
-        'が' => "ga",
-        'ぎ' => "gi",
-        'ぐ' => "gu",
-        'げ' => "ge",
-        'ご' => "go",
-        'ざ' => "za",
-        'じ' => "ji",
-        'ず' => "zu",
-        'ぜ' => "ze",
-        'ぞ' => "zo",
-        'だ' => "da",
-        'ぢ' => "ji",
-        'づ' => "zu",
-        'で' => "de",
-        'ど' => "do",
-        'ば' => "ba",
-        'び' => "bi",
-        'ぶ' => "bu",
-        'べ' => "be",
-        'ぼ' => "bo",
-        'ぱ' => "pa",
-        'ぴ' => "pi",
-        'ぷ' => "pu",
-        'ぺ' => "pe",
-        'ぽ' => "po",
-        'ぁ' => "a",
-        'ぃ' => "i",
-        'ぅ' => "u",
-        'ぇ' => "e",
-        'ぉ' => "o",
-        'ゃ' => "ya",
-        'ゅ' => "yu",
-        'ょ' => "yo",
-        'ゎ' => "wa",
-        _ => hira.ToString(),
-    };
 }
