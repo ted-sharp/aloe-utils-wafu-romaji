@@ -9,15 +9,15 @@
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Authors>ted-sharp</Authors>
 		<Company></Company>
 		<Description>日本語文字列をローマ字に変換するためのユーティリティライブラリ</Description>
-		<PackageId>Aloe.Utils.Wafu.Romanizer</PackageId>
+		<PackageId>Aloe.Utils.Wafu.Romaji</PackageId>
 		<PackageTags>romanization;japanese;ローマ字;変換</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/aloe-utils/aloe-utils-wafu-romanizer</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/aloe-utils/aloe-utils-wafu-romanizer.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/aloe-utils/aloe-utils-wafu-romaji</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/aloe-utils/aloe-utils-wafu-romaji.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageIcon>Aloe.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
