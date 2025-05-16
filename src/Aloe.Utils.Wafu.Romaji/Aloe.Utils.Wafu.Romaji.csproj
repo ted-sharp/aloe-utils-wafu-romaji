@@ -9,7 +9,7 @@
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0.1</Version>
+		<Version>1.1.0</Version>
 		<Authors>ted-sharp</Authors>
 		<Company></Company>
 		<Description>日本語文字列をローマ字に変換するためのユーティリティライブラリ</Description>
