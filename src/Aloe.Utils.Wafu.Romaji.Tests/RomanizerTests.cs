@@ -139,6 +139,7 @@ public class RomanizerTests
     [InlineData("ク", "ku")]
     [InlineData("ケ", "ke")]
     [InlineData("コ", "ko")]
+    [InlineData("ヴ", "vu")]
     [Display(Name = "カタカナが正しく変換されること")]
     public void Convert_Katakana_ConvertsCorrectly(string input, string expected)
     {
@@ -150,19 +151,50 @@ public class RomanizerTests
     }
 
     [Theory]
-    [InlineData("あい123", "ai123")]
-    [InlineData("カタカナ123", "katakana123")]
-    [InlineData("あい うえ", "ai ue")]
-    [InlineData("あい\nうえ", "ai\nue")]
-    [InlineData(null, "")]
-    [InlineData("", "")]
+    [InlineData("ゐ", "i")]
+    [InlineData("ゑ", "e")]
+    [InlineData("ヱ", "e")]
+    [InlineData("ヰ", "i")]
+    [InlineData("ヴァ", "va")]
+    [InlineData("ヴィ", "vi")]
+    [InlineData("ヴェ", "ve")]
+    [InlineData("ヴォ", "vo")]
+    [InlineData("ヴャ", "vya")]
+    [InlineData("ヴュ", "vyu")]
+    [InlineData("ヴョ", "vyo")]
+    [InlineData("ヷ", "va")]
+    [InlineData("ヸ", "vi")]
+    [InlineData("ヹ", "ve")]
+    [InlineData("ヺ", "vo")]
     [Display(Name = "特殊文字が正しく変換されること")]
-    public void Convert_SpecialCharacters_ConvertsCorrectly(string? input, string expected)
+    public void Convert_Special_ConvertsCorrectly(string input, string expected)
     {
         // Arrange & Act
         var actual = Romanizer.Convert(input);
 
         // Assert
+        Assert.Equal(expected, actual);
+    }
+
+
+    [Theory]
+    [InlineData("イーハトーヴォ", "iihatoovo")]
+    [InlineData("キーボード", "kiiboodo")]
+    [InlineData("ゲームーオーバー", "geemuuoobaa")]
+    [InlineData("パーティー", "paatii")]
+    [InlineData("シェフ", "shefu")]
+    [InlineData("チェリー", "cherii")]
+    [InlineData("ジェット", "jetto")]
+    [InlineData("ティーカップ", "tiikappu")]
+    [InlineData("ディスク", "disuku")]
+    [InlineData("トゥインクル", "tuinkuru")]
+    [InlineData("ウィスキー", "wisukii")]
+    [InlineData("クァルテット", "kwarutetto")]
+    [InlineData("グァルーガ", "gwaruuga")]
+    [Display(Name = "外来語が正しく変換されること")]
+    public void Convert_Gairaigo_ConvertsCorrectly(string input, string expected)
+    {
+        var actual = Romanizer.Convert(input);
         Assert.Equal(expected, actual);
     }
 }

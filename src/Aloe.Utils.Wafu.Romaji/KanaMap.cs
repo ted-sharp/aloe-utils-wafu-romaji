@@ -110,6 +110,54 @@ internal static class KanaMap
     /// <summary>ぴょ</summary>
     internal const string PYO = "ぴょ";
 
+    /// <summary>しぇ</summary>
+    internal const string SHE = "しぇ";
+
+    /// <summary>ちぇ</summary>
+    internal const string CHE = "ちぇ";
+
+    /// <summary>じぇ</summary>
+    internal const string JE = "じぇ";
+
+    /// <summary>てぃ</summary>
+    internal const string TI = "てぃ";
+
+    /// <summary>でぃ</summary>
+    internal const string DI = "でぃ";
+
+    /// <summary>とぅ</summary>
+    internal const string TU = "とぅ";
+
+    /// <summary>うぃ</summary>
+    internal const string WI = "うぃ";
+
+    /// <summary>くぁ</summary>
+    internal const string KWA = "くぁ";
+
+    /// <summary>ぐぁ</summary>
+    internal const string GWA = "ぐぁ";
+
+    /// <summary>ヴァ</summary>
+    internal const string VA = "ゔぁ";
+
+    /// <summary>ヴィ</summary>
+    internal const string VI = "ゔぃ";
+
+    /// <summary>ヴェ</summary>
+    internal const string VE = "ゔぇ";
+
+    /// <summary>ヴォ</summary>
+    internal const string VO = "ゔぉ";
+
+    /// <summary>ヴャ</summary>
+    internal const string VYA = "ゔゃ";
+
+    /// <summary>ヴュ</summary>
+    internal const string VYU = "ゔゅ";
+
+    /// <summary>ヴョ</summary>
+    internal const string VYO = "ゔょ";
+
     /// <summary>
     /// ひらがな1文字をローマ字に変換します。
     /// </summary>
@@ -198,6 +246,14 @@ internal static class KanaMap
         'ゅ' => "yu",
         'ょ' => "yo",
         'ゎ' => "wa",
+        'ゐ' => "i",
+        'ゑ' => "e",
+        'ゔ' => "vu",
+        'ヷ' => "va",
+        'ヸ' => "vi",
+        'ヴ' => "vu",
+        'ヹ' => "ve",
+        'ヺ' => "vo",
         _ => hira.ToString(),
     };
 }

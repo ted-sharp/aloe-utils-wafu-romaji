@@ -23,17 +23,29 @@ public static class Romanizer
             return String.Empty;
         }
 
-        var vsb = new ValueStringBuilder(stackalloc char[256]);
-
+        // ■ カタカナ→ひらがな
+        Span<char> temp = stackalloc char[input.Length];
+        var len = 0;
         for (var i = 0; i < input.Length; i++)
         {
-            // ■ カタカナ→ひらがな正規化
-            var c0 = (input[i] >= 'ァ' && input[i] <= 'ヺ') ? (char)(input[i] - 0x60) : input[i];
+            // 30A1 ァ → 3041 ぁ
+            // 30F6 ヶ → 3096 ゖ
+            // 30F7 ヷ
+            // 30F8 ヸ
+            // 30F9 ヹ
+            // 30FA ヺ
+            var c = input[i];
+            temp[len++] = (c is >= 'ァ' and <= 'ヶ') ? (char)(c - 0x60) : c;
+        }
 
+        var vsb = new ValueStringBuilder(stackalloc char[256]);
+
+        for (var i = 0; i < len; i++)
+        {
             // ■ 拗音（二文字）チェック
-            if (i + 1 < input.Length)
+            if (i + 1 < len)
             {
-                var two = input.Slice(i, 2);
+                var two = temp.Slice(i, 2);
 #pragma warning disable SA1107 // Code should not contain multiple statements on one line
 #pragma warning disable SA1501 // Statement should not be on a single line
                 if (two.SequenceEqual(KYA)) { vsb.Append("kya"); i++; continue; }
@@ -69,14 +81,35 @@ public static class Romanizer
                 if (two.SequenceEqual(PYA)) { vsb.Append("pya"); i++; continue; }
                 if (two.SequenceEqual(PYU)) { vsb.Append("pyu"); i++; continue; }
                 if (two.SequenceEqual(PYO)) { vsb.Append("pyo"); i++; continue; }
+
+                // 特殊な外来語の変換
+                if (two.SequenceEqual(SHE)) { vsb.Append("she"); i++; continue; }
+                if (two.SequenceEqual(CHE)) { vsb.Append("che"); i++; continue; }
+                if (two.SequenceEqual(JE)) { vsb.Append("je"); i++; continue; }
+                if (two.SequenceEqual(TI)) { vsb.Append("ti"); i++; continue; }
+                if (two.SequenceEqual(DI)) { vsb.Append("di"); i++; continue; }
+                if (two.SequenceEqual(TU)) { vsb.Append("tu"); i++; continue; }
+                if (two.SequenceEqual(WI)) { vsb.Append("wi"); i++; continue; }
+                if (two.SequenceEqual(KWA)) { vsb.Append("kwa"); i++; continue; }
+                if (two.SequenceEqual(GWA)) { vsb.Append("gwa"); i++; continue; }
+                if (two.SequenceEqual(VA)) { vsb.Append("va"); i++; continue; }
+                if (two.SequenceEqual(VI)) { vsb.Append("vi"); i++; continue; }
+                if (two.SequenceEqual(VE)) { vsb.Append("ve"); i++; continue; }
+                if (two.SequenceEqual(VO)) { vsb.Append("vo"); i++; continue; }
+                if (two.SequenceEqual(VYA)) { vsb.Append("vya"); i++; continue; }
+                if (two.SequenceEqual(VYU)) { vsb.Append("vyu"); i++; continue; }
+                if (two.SequenceEqual(VYO)) { vsb.Append("vyo"); i++; continue; }
 #pragma warning restore SA1501 // Statement should not be on a single line
 #pragma warning restore SA1107 // Code should not contain multiple statements on one line
             }
 
+            var c0 = temp[i];
+
             // ■ 促音「っ」
-            if (c0 == 'っ' && i + 1 < input.Length)
+            // 次の子音を二重にする
+            if (c0 == 'っ' && i + 1 < len)
             {
-                var next = (input[i + 1] >= 'ァ' && input[i + 1] <= 'ヺ') ? (char)(input[i + 1] - 0x60) : input[i + 1];
+                var next = temp[i + 1];
                 var m = MapSingle(next);
                 if (!String.IsNullOrEmpty(m))
                 {
@@ -87,6 +120,7 @@ public static class Romanizer
             }
 
             // ■ 長音記号「ー」
+            // ひとつ前のローマ字を繰り返す
             if (c0 == 'ー')
             {
                 if (vsb.Length > 0)
